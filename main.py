@@ -1,55 +1,68 @@
 import requests
-from bs4 import BeautifulSoup
-import tldextract
-import re
+from urllib.parse import urlparse
 
-# Function to extract HTTP headers
-def get_http_headers(url):
+def fetch_http_headers(url):
+    """
+    Fetches and returns HTTP headers from a specified URL.
+    
+    Args:
+        url (str): The URL from which to fetch headers.
+    
+    Returns:
+        dict: A dictionary containing HTTP headers.
+    """
     try:
         response = requests.get(url)
         return response.headers
     except requests.RequestException as e:
-        print(f"Error fetching {url}: {e}")
-        return None
+        print(f"Error fetching headers from {url}: {e}")
+        return {}
 
-# Function to extract email addresses from a webpage
-def extract_emails(html_content):
-    # Regular expression to find email addresses
-    email_regex = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
-    return re.findall(email_regex, html_content)
+def analyze_headers(headers):
+    """
+    Analyzes HTTP headers for common security-related fields.
+    
+    Args:
+        headers (dict): A dictionary of HTTP headers.
+    
+    Returns:
+        dict: A dictionary summarizing analysis results.
+    """
+    security_headers = {
+        "Content-Security-Policy": headers.get("Content-Security-Policy"),
+        "X-Content-Type-Options": headers.get("X-Content-Type-Options"),
+        "X-Frame-Options": headers.get("X-Frame-Options"),
+        "Strict-Transport-Security": headers.get("Strict-Transport-Security"),
+        "X-XSS-Protection": headers.get("X-XSS-Protection")
+    }
+    return {key: value for key, value in security_headers.items() if value}
 
-# Function to scrape a webpage and extract information
-def scrape_website(url):
-    headers = get_http_headers(url)
+def main():
+    # Example URL to analyze
+    url = input("Enter a URL to analyze (include http/https): ")
+    
+    # Parse the URL to ensure it is valid
+    parsed_url = urlparse(url)
+    if not all([parsed_url.scheme, parsed_url.netloc]):
+        print("Invalid URL. Please provide a valid URL including 'http://' or 'https://'.")
+        return
+    
+    # Fetch the headers from the URL
+    headers = fetch_http_headers(url)
+    
+    # If headers are retrieved successfully, analyze them
     if headers:
-        print(f"HTTP Headers for {url}:")
-        for key, value in headers.items():
-            print(f"{key}: {value}")
-
-    try:
-        # Fetch the webpage content
-        response = requests.get(url)
-        html_content = response.text
+        print("\nAnalyzing HTTP Headers:")
+        analysis_results = analyze_headers(headers)
         
-        # Extract emails from the webpage
-        emails = extract_emails(html_content)
-        if emails:
-            print(f"Email addresses found on {url}: {', '.join(emails)}")
+        if analysis_results:
+            for header, value in analysis_results.items():
+                print(f"{header}: {value}")
         else:
-            print(f"No email addresses found on {url}.")
+            print("No security-related headers found.")
+    else:
+        print("Could not retrieve headers.")
 
-    except requests.RequestException as e:
-        print(f"Error accessing {url}: {e}")
-
-# The main function to execute the script
 if __name__ == "__main__":
-    # Example URL for testing (can be replaced with user input)
-    target_url = 'https://example.com'
-    
-    # Extract domain information
-    extracted = tldextract.extract(target_url)
-    print(f"Scanning domain: {extracted.domain}.{extracted.suffix}")
-    
-    # Start scraping the website
-    scrape_website(target_url)
+    main()
 ```
