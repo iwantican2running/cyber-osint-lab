@@ -1,48 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Cyber Dashboard</title>
+    <title>OSINT Cybersecurity Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
     <div id="cyber-dashboard">
         <header>
-            <h1>OSINT Cyber Dashboard</h1>
+            <h1>OSINT Cybersecurity Dashboard</h1>
         </header>
-        <section id="terminal">
-            <h2>Simulated Terminal</h2>
-            <div class="terminal-output">
-                <p>Connected to mainframe...</p>
-                <p>Fetching data...</p>
-                <p>Data received: 1024 packets.</p>
-            </div>
-        </section>
-        <section id="data-visualization">
-            <h2>Dynamic Data Visualization</h2>
-            <div class="chart">
-                <div class="bar" style="height: 70%; animation-delay: 0s;"></div>
-                <div class="bar" style="height: 50%; animation-delay: 0.1s;"></div>
-                <div class="bar" style="height: 90%; animation-delay: 0.2s;"></div>
-                <div class="bar" style="height: 30%; animation-delay: 0.3s;"></div>
-            </div>
-        </section>
-        <section id="network-map">
-            <h2>Network Map</h2>
-            <div class="network-node" style="top: 20%; left: 30%; animation-delay: 0s;"></div>
-            <div class="network-node" style="top: 50%; left: 50%; animation-delay: 0.1s;"></div>
-            <div class="network-node" style="top: 70%; left: 80%; animation-delay: 0.2s;"></div>
-            <div class="network-node" style="top: 40%; left: 20%; animation-delay: 0.3s;"></div>
-        </section>
-        <section id="encryption">
-            <h2>Encryption/Decryption</h2>
-            <div class="encryption-effect">
-                <p>Encrypting data...</p>
-                <p>Data encrypted: 0x1A2B3C4D</p>
-            </div>
-        </section>
+        <main>
+            <section id="terminal" class="dashboard-section">
+                <h2>Simulated Terminal</h2>
+                <div class="terminal-output">
+                    <p>Welcome to the OSINT Cybersecurity Terminal.</p>
+                    <p>Loading data...</p>
+                </div>
+            </section>
+
+            <section id="data-visualization" class="dashboard-section">
+                <h2>Dynamic Data Visualizations</h2>
+                <div class="chart" id="chart1"></div>
+                <div class="chart" id="chart2"></div>
+            </section>
+
+            <section id="network-map" class="dashboard-section">
+                <h2>Network Map</h2>
+                <div class="network-container">
+                    <div class="node" id="node1">Node 1</div>
+                    <div class="node" id="node2">Node 2</div>
+                    <div class="node" id="node3">Node 3</div>
+                </div>
+            </section>
+
+            <section id="encryption" class="dashboard-section">
+                <h2>Encryption/Decryption Simulation</h2>
+                <div class="encryption-effect">
+                    <p class="encrypted-text">Encrypted Text: XyZ12345</p>
+                    <button id="decrypt-button">Decrypt</button>
+                </div>
+            </section>
+        </main>
     </div>
 </body>
+
 </html>
