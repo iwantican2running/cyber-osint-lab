@@ -1,52 +1,58 @@
-const terminalOutput = document.getElementById('terminal');
+const terminalOutput = document.getElementById('terminal-output');
 const cursor = document.createElement('span');
-cursor.textContent = '|';
-cursor.style.animation = 'blink 1s step-end infinite';
+cursor.innerText = '|';
+cursor.className = 'cursor';
 terminalOutput.appendChild(cursor);
 
 const commands = [
-    'Scanning for vulnerabilities...',
-    'Gathering public data...',
-    'Analyzing metadata...',
-    'Compiling results...',
+    "Initializing OSINT framework...",
+    "Gathering data from sources...",
+    "Analyzing information...",
+    "Compiling results...",
+    "OSINT report ready."
 ];
 
 let commandIndex = 0;
 
-function simulateTerminalOutput() {
-    if (commandIndex < commands.length) {
-        const command = commands[commandIndex];
-        const outputLine = document.createElement('div');
-        outputLine.textContent = command;
-        terminalOutput.insertBefore(outputLine, cursor);
-        commandIndex++;
-        setTimeout(simulateTerminalOutput, 2000);
-    } else {
-        cursor.style.display = 'none';
-    }
-}
-
-function updateDashboard(data) {
-    const dashboard = document.getElementById('dashboard');
-    dashboard.innerHTML = ''; // Clear existing data
-    data.forEach(item => {
-        const div = document.createElement('div');
-        div.textContent = `Data Point: ${item}`;
-        dashboard.appendChild(div);
+function typeCommand(command) {
+    return new Promise(resolve => {
+        let index = 0;
+        const typingInterval = setInterval(() => {
+            terminalOutput.innerText += command[index++];
+            if (index === command.length) {
+                clearInterval(typingInterval);
+                setTimeout(resolve, 500);
+            }
+        }, 100);
     });
 }
 
-document.getElementById('fetchDataBtn').addEventListener('click', () => {
-    const mockData = Array.from({ length: 5 }, (_, i) => `Result ${i + 1}`);
-    updateDashboard(mockData);
+async function simulateTerminalOutput() {
+    for (const command of commands) {
+        await typeCommand(command);
+        terminalOutput.innerText += '\n';
+    }
+    cursor.style.display = 'none'; // Hide cursor after typing
+}
+
+setInterval(() => {
+    cursor.style.visibility = (cursor.style.visibility === 'hidden' ? 'visible' : 'hidden');
+}, 500);
+
+document.getElementById('fetch-data-btn').addEventListener('click', () => {
+    terminalOutput.innerText = ''; // Clear previous output
+    commandIndex = 0; // Reset command index
+    simulateTerminalOutput();
 });
 
-window.onload = () => {
-    simulateTerminalOutput();
-};
+// Dynamic data visualization (example)
+const dataVisualization = document.getElementById('data-visualization');
+
+function updateVisualization() {
+    dataVisualization.innerText = `Latest findings: ${Math.random().toFixed(2)}`; // Simulation with random data
+}
+
+setInterval(updateVisualization, 3000); // Update every 3 seconds
 ```
 
-```css
-@keyframes blink {
-    50% { opacity: 0; }
-}
+In this code, we simulate a terminal output with dynamic typing and blinking cursor effects while adding an interactive button to fetch data and update a simple data visualization section.
